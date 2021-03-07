@@ -40,7 +40,7 @@ public class ClientEntity implements Serializable{
 	private String email;
 	
 	@Column(nullable=false, length=50)
-	private double phone;
+	private String phone;
 	
 	@Column(nullable=false)
 	private String codeClient;
@@ -82,6 +82,14 @@ public class ClientEntity implements Serializable{
 
 	
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public int getYear() {
 		return year;
 	}
@@ -90,13 +98,6 @@ public class ClientEntity implements Serializable{
 		this.year = year;
 	}
 
-	public double getPhone() {
-		return phone;
-	}
-
-	public void setPhone(double phone) {
-		this.phone = phone;
-	}
 
 	public String getEmail() {
 		return email;

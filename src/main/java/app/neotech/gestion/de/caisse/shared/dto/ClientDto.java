@@ -15,7 +15,7 @@ public class ClientDto implements Serializable{
 	private String adresse;
 	private int year;
 	private String email;
-	private double phone;
+	private String phone;
 	private String codeClient;
 
 	
@@ -57,10 +57,11 @@ public class ClientDto implements Serializable{
 	public void setYear(int year) {
 		this.year = year;
 	}
-	public double getPhone() {
+	
+	public String getPhone() {
 		return phone;
 	}
-	public void setPhone(double phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 	public String getCodeClient() {

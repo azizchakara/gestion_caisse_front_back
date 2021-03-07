@@ -1,8 +1,13 @@
 package app.neotech.gestion.de.caisse.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,13 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import app.neotech.gestion.de.caisse.responses.ClientResponse;
 import app.neotech.gestion.de.caisse.services.ClientService;
 import app.neotech.gestion.de.caisse.shared.dto.ClientDto;
 
 @RestController
 @RequestMapping("/clients")
-
+@CrossOrigin
 public class ClientController {
 
 	@Autowired
@@ -40,11 +48,23 @@ public class ClientController {
 		ClientDto updateClient = clientService.updateClient(id, clientDto);
 		return new ResponseEntity<ClientDto>(updateClient,HttpStatus.OK);
 	}
+	@GetMapping(path="/all")
+	public List<ClientResponse> getAllClients(@RequestParam(value="page",defaultValue="1") int page,@RequestParam(value="limit", defaultValue="15") int limit){
+			List<ClientResponse> clientResponse = new ArrayList<>();
+			List<ClientDto> clients = clientService.getClients(page,limit);
+			for(ClientDto clientDto:clients) {
+				ClientResponse client = new ClientResponse();
+				BeanUtils.copyProperties(clientDto, client);
+				clientResponse.add(client);
+			}
+			return clientResponse;
+	}
 
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<Object> deleteClient(@PathVariable Long id) {
 		clientService.deleteClient(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
+
 
 }

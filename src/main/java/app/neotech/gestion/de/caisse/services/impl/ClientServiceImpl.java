@@ -1,12 +1,19 @@
 package app.neotech.gestion.de.caisse.services.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import app.neotech.gestion.de.caisse.entities.ClientEntity;
 import app.neotech.gestion.de.caisse.repositories.ClientRepository;
+import app.neotech.gestion.de.caisse.responses.ClientResponse;
 import app.neotech.gestion.de.caisse.services.ClientService;
 import app.neotech.gestion.de.caisse.shared.dto.ClientDto;
 
@@ -70,6 +77,23 @@ public class ClientServiceImpl implements ClientService {
 		if(clientEntity==null) throw null;
 		clientRepository.delete(clientEntity);
 		
+	}
+
+
+
+	@Override
+	public List<ClientDto> getClients(int page, int limit) {
+		if(page > 0) page -=1;
+		List<ClientDto> clientsDto = new ArrayList<>();
+		Pageable pageableRequest = PageRequest.of(page, limit);
+		Page<ClientEntity> clientPage = clientRepository.findAll(pageableRequest);
+		List<ClientEntity> clients = clientPage.getContent();
+		for(ClientEntity clientEntity:clients) {
+			ClientDto client = new ClientDto();
+			BeanUtils.copyProperties(clientEntity, client);
+			clientsDto.add(client);
+		}
+		return clientsDto;
 	}
 
 	
